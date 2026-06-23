@@ -1,0 +1,88 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Verifica se o utilizador autenticado é administrador
+    function isAdmin() {
+      return request.auth != null
+        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isAdmin == true;
+    }
+    function signedIn() { return request.auth != null; }
+    function isOwner(uid) { return request.auth != null && request.auth.uid == uid; }
+
+    // ── Utilizadores ──────────────────────────────────────────────────────────
+    match /users/{uid} {
+      allow read: if signedIn();
+      // Ao criar a conta não se pode incluir 'isAdmin'/'suspended' (auto-promoção).
+      allow create: if isOwner(uid)
+        && !request.resource.data.keys().hasAny(['isAdmin', 'suspended']);
+      // O dono edita o seu doc, MAS não pode mexer em 'isAdmin'/'suspended' (só admins).
+      // Outros utilizadores só podem alterar os contadores sociais (seguir/aceitar).
+      allow update: if isAdmin()
+        || (isOwner(uid)
+            && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['isAdmin', 'suspended']))
+        || request.resource.data.diff(resource.data).affectedKeys()
+             .hasOnly(['followersCount', 'followingCount', 'followingIds']);
+      allow delete: if isAdmin();
+
+      // Subcoleções sociais — precisam de escrita cruzada entre utilizadores.
+      // (Listadas explicitamente para NÃO abrangerem o documento do perfil.)
+      match /followers/{d}       { allow read, write: if signedIn(); }
+      match /following/{d}       { allow read, write: if signedIn(); }
+      match /followRequests/{d}  { allow read, write: if signedIn(); }
+      match /notifications/{d}   { allow read, write: if signedIn(); }
+      match /storyLikes/{d}      { allow read, write: if signedIn(); }
+      // Livros: qualquer um lê (perfis públicos), só o dono escreve.
+      match /books/{d}           { allow read: if signedIn(); allow write: if isOwner(uid); }
+      // Guardados: privados do dono.
+      match /saved/{d}           { allow read, write: if isOwner(uid); }
+    }
+
+    // ── Publicações ───────────────────────────────────────────────────────────
+    match /posts/{postId} {
+      allow read: if signedIn();
+      allow create: if signedIn() && request.resource.data.authorId == request.auth.uid;
+      // Apagar: só o autor ou um admin.
+      allow delete: if signedIn()
+        && (resource.data.authorId == request.auth.uid || isAdmin());
+      // Editar: o autor edita tudo; qualquer utilizador só pode mexer nos gostos.
+      allow update: if signedIn() && (
+        resource.data.authorId == request.auth.uid
+        || isAdmin()
+        || request.resource.data.diff(resource.data).affectedKeys().hasOnly(['likedBy'])
+      );
+
+      // Comentários
+      match /comments/{commentId} {
+        allow read: if signedIn();
+        allow create: if signedIn() && request.resource.data.authorId == request.auth.uid;
+        // Apaga: autor do comentário, autor do post, ou admin.
+        allow delete: if signedIn() && (
+          resource.data.authorId == request.auth.uid
+          || isAdmin()
+          || get(/databases/$(database)/documents/posts/$(postId)).data.authorId == request.auth.uid
+        );
+      }
+    }
+
+    // ── Conversas ─────────────────────────────────────────────────────────────
+    match /chats/{chatId} {
+      allow read, write: if signedIn();
+      match /messages/{messageId} {
+        allow read, write: if signedIn();
+      }
+    }
+
+    // ── Reports (denúncias) ───────────────────────────────────────────────────
+    match /reports/{reportId} {
+      allow create: if signedIn();
+      allow read, delete: if isAdmin();
+    }
+
+    // ── Feedback (reportar problema) ──────────────────────────────────────────
+    match /feedback/{feedbackId} {
+      allow create: if signedIn();
+      allow read, delete: if isAdmin();
+    }
+  }
+}

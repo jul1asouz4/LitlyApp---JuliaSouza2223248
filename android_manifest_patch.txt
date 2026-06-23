@@ -1,0 +1,14 @@
+Adiciona esta linha DENTRO de <manifest> e ANTES de <application> no ficheiro:
+  android/app/src/main/AndroidManifest.xml
+
+<uses-permission android:name="android.permission.INTERNET"/>
+
+E dentro de <application ...> adiciona:
+  android:usesCleartextTraffic="true"
+
+Exemplo de como deve ficar:
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <application
+        android:usesCleartextTraffic="true"
+        ...
