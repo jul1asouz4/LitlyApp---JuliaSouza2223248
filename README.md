@@ -37,6 +37,20 @@
 
 ---
 
+## 📸 Capturas de Ecrã
+
+| Feed Principal | Explorar | Perfil |
+|:---:|:---:|:---:|
+| ![Feed](screenshots/feed.png) | ![Explorar](screenshots/explorar.png) | ![Perfil](screenshots/perfil.png) |
+
+| Publicação | Chat | Modo Escuro |
+|:---:|:---:|:---:|
+| ![Publicação](screenshots/publicacao.png) | ![Chat](screenshots/chat.png) | ![Modo Escuro](screenshots/dark.png) |
+
+> As imagens encontram-se na pasta [`screenshots/`](screenshots/). Para as substituir pelas tuas, coloca os ficheiros `.png` com estes nomes nessa pasta.
+
+---
+
 ## 🛠️ Tecnologias Utilizadas
 
 - **Frontend:** [Flutter](https://flutter.dev/) (Dart) — Web
