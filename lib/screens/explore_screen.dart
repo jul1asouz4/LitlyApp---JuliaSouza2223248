@@ -380,6 +380,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                       padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
                       itemCount: docs.length,
                       itemBuilder: (_, i) => PostCard(
+                        key: ValueKey(docs[i].id),
                         postId: docs[i].id,
                         data: docs[i].data() as Map<String, dynamic>,
                       ),

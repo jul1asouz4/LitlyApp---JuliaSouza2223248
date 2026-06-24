@@ -67,7 +67,7 @@ class SavedPostsScreen extends StatelessWidget {
             itemBuilder: (_, i) {
               final d = docs[i].data() as Map<String, dynamic>;
               final postId = d['postId'] as String? ?? docs[i].id;
-              return PostCard(postId: postId, data: d);
+              return PostCard(key: ValueKey(postId), postId: postId, data: d);
             },
           );
         },

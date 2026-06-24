@@ -449,6 +449,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     itemBuilder: (_, i) {
                       final d = docs[i].data() as Map<String, dynamic>;
                       return PostCard(
+                        key: ValueKey(docs[i].id),
                         postId: docs[i].id,
                         data: d,
                         isOwner: d['authorId'] == uidF,

@@ -38,11 +38,26 @@ class _PostCardState extends State<PostCard> {
   @override
   void initState() {
     super.initState();
-    // A contagem deriva sempre do array likedBy (nunca fica negativa)
+    _syncLikes();
+    _checkSaved();
+  }
+
+  // A contagem deriva sempre do array likedBy (nunca fica negativa)
+  void _syncLikes() {
     final likedBy = List<String>.from(widget.data['likedBy'] ?? []);
     _likes = likedBy.length;
     _liked = likedBy.contains(_uid);
-    _checkSaved();
+  }
+
+  // O ListView reutiliza o State entre posts diferentes: ao mudar de post,
+  // recalcula as curtidas a partir dos dados novos (evita contagem "fantasma").
+  @override
+  void didUpdateWidget(PostCard oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.postId != widget.postId) {
+      _syncLikes();
+      _checkSaved();
+    }
   }
 
   Future<void> _checkSaved() async {

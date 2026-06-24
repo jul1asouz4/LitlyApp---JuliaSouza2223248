@@ -401,6 +401,7 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen> {
                       padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
                       itemCount: postDocs.length,
                       itemBuilder: (_, i) => PostCard(
+                        key: ValueKey(postDocs[i].id),
                         postId: postDocs[i].id,
                         data: postDocs[i].data() as Map<String, dynamic>,
                       ),
