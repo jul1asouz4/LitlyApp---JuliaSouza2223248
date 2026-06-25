@@ -345,7 +345,7 @@ class _PostCardState extends State<PostCard> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: Colors.white,
+      backgroundColor: appSurface(context),
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
       builder: (_) => _CommentsSheet(
@@ -612,7 +612,7 @@ class _PostCardState extends State<PostCard> {
   void _showOptions(BuildContext context) {
     showModalBottomSheet(
       context: context,
-      backgroundColor: Colors.white,
+      backgroundColor: appSurface(context),
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
       builder: (_) => Padding(
@@ -734,8 +734,8 @@ class _CommentsSheetState extends State<_CommentsSheet> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text('Comentários',
-                        style: TextStyle(fontSize: 17, fontWeight: FontWeight.w800, color: Color(0xFF1A1A1A))),
+                      Text('Comentários',
+                        style: TextStyle(fontSize: 17, fontWeight: FontWeight.w800, color: appText(context))),
                       GestureDetector(
                         onTap: () => Navigator.pop(context),
                         child: const Icon(Icons.close, color: Color(0xFF888888), size: 22),
@@ -797,7 +797,7 @@ class _CommentsSheetState extends State<_CommentsSheet> {
                                   Row(
                                     children: [
                                       Text(name,
-                                        style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: Color(0xFF1A1A1A))),
+                                        style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: appText(context))),
                                       const SizedBox(width: 6),
                                       Text(time,
                                         style: const TextStyle(fontSize: 11, color: Color(0xFFAAAAAA))),
@@ -805,7 +805,7 @@ class _CommentsSheetState extends State<_CommentsSheet> {
                                   ),
                                   const SizedBox(height: 3),
                                   Text(c['text'] ?? '',
-                                    style: const TextStyle(fontSize: 14, color: Color(0xFF333333), height: 1.45)),
+                                    style: TextStyle(fontSize: 14, color: appText(context), height: 1.45)),
                                 ],
                               ),
                             ),

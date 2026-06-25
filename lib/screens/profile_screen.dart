@@ -109,7 +109,7 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
     ];
     showModalBottomSheet(
       context: context,
-      backgroundColor: Colors.white,
+      backgroundColor: appSurface(context),
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
       builder: (ctx) => Padding(
         padding: const EdgeInsets.fromLTRB(20, 12, 20, 32),
@@ -132,7 +132,7 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(book['title'] ?? 'Livro',
-                        style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w800, color: Color(0xFF1A1A1A))),
+                        style: TextStyle(fontSize: 17, fontWeight: FontWeight.w800, color: appText(context))),
                       const SizedBox(height: 2),
                       Text(book['author'] ?? '', style: const TextStyle(fontSize: 13, color: Color(0xFF888888))),
                     ],
@@ -155,7 +155,7 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                   constraints: const BoxConstraints(maxHeight: 160),
                   margin: const EdgeInsets.only(bottom: 6),
                   child: SingleChildScrollView(
-                    child: Text(syn, style: const TextStyle(fontSize: 13, color: Color(0xFF555555), height: 1.5)),
+                    child: Text(syn, style: TextStyle(fontSize: 13, color: appText(context), height: 1.5)),
                   ),
                 );
               },
@@ -239,7 +239,7 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: Colors.white,
+      backgroundColor: appSurface(context),
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
       builder: (ctx) => Padding(
         padding: EdgeInsets.only(
@@ -253,7 +253,7 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
             Center(child: Container(width: 36, height: 4,
               margin: const EdgeInsets.only(bottom: 16),
               decoration: BoxDecoration(color: const Color(0xFFDDDDDD), borderRadius: BorderRadius.circular(2)))),
-            const Text('Editar perfil', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800, color: Color(0xFF1A1A1A))),
+            Text('Editar perfil', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800, color: appText(context))),
             const SizedBox(height: 20),
             Center(
               child: GestureDetector(
@@ -710,7 +710,7 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                           ),
                           const SizedBox(height: 4),
                           Text(title, maxLines: 1, overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w600, color: Color(0xFF1A1A1A))),
+                            style: TextStyle(fontSize: 10, fontWeight: FontWeight.w600, color: appText(context))),
                         ],
                       ),
                     );
@@ -786,7 +786,7 @@ class _FollowListScreenState extends State<_FollowListScreen> {
     return Scaffold(
       backgroundColor: appBg(context),
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: appSurface(context),
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new, size: 18, color: Color(0xFF1A1A1A)),
@@ -796,7 +796,7 @@ class _FollowListScreenState extends State<_FollowListScreen> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(widget.title,
-              style: const TextStyle(color: Color(0xFF1A1A1A), fontWeight: FontWeight.w700, fontSize: 16)),
+              style: TextStyle(color: appText(context), fontWeight: FontWeight.w700, fontSize: 16)),
             Text('${widget.count}',
               style: const TextStyle(color: Color(0xFF888888), fontSize: 12)),
           ],
@@ -858,10 +858,10 @@ class _UserRowState extends State<_UserRow> {
         radius: 22,
         backgroundColor: const Color(0xFFEEEEEE),
         child: Text(widget.user.name[0],
-          style: const TextStyle(color: Color(0xFF555555), fontWeight: FontWeight.bold, fontSize: 16)),
+          style: TextStyle(color: appText(context), fontWeight: FontWeight.bold, fontSize: 16)),
       ),
       title: Text(widget.user.name,
-        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: Color(0xFF1A1A1A))),
+        style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: appText(context))),
       subtitle: Text(widget.user.handle,
         style: const TextStyle(fontSize: 12, color: Color(0xFF999999))),
       trailing: GestureDetector(
@@ -1018,7 +1018,7 @@ class SettingsScreen extends StatelessWidget {
               final confirmed = await showDialog<bool>(
                 context: context,
                 builder: (_) => AlertDialog(
-                  backgroundColor: Colors.white,
+                  backgroundColor: appSurface(context),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                   title: const Text('Terminar sessão?', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16)),
                   content: const Text('Tens a certeza que queres sair?'),
@@ -1111,7 +1111,7 @@ class _EditField extends StatelessWidget {
     child: TextField(
       controller: controller,
       maxLines: maxLines,
-      style: const TextStyle(fontSize: 14, color: Color(0xFF1A1A1A)),
+      style: TextStyle(fontSize: 14, color: appText(context)),
       decoration: InputDecoration(
         hintText: hint,
         hintStyle: const TextStyle(color: Color(0xFFBBBBBB), fontSize: 14),

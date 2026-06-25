@@ -36,7 +36,7 @@ class _ChatListScreenState extends State<ChatListScreen> with SingleTickerProvid
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: Colors.white,
+      backgroundColor: appSurface(context),
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
       builder: (ctx) => StatefulBuilder(
         builder: (_, setModal) {
@@ -479,7 +479,7 @@ class _ChatScreenState extends State<ChatScreen> {
   void _openMenu() {
     showModalBottomSheet(
       context: context,
-      backgroundColor: Colors.white,
+      backgroundColor: appSurface(context),
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
       builder: (_) => SafeArea(
         child: Column(
@@ -539,7 +539,7 @@ class _ChatScreenState extends State<ChatScreen> {
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
-        backgroundColor: Colors.white,
+        backgroundColor: appSurface(context),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         title: Text('Bloquear ${widget.name}?', style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 16)),
         content: const Text('Esta pessoa não poderá enviar-te mensagens nem ver o teu perfil.'),
@@ -564,7 +564,7 @@ class _ChatScreenState extends State<ChatScreen> {
     String? _reason;
     showModalBottomSheet(
       context: context,
-      backgroundColor: Colors.white,
+      backgroundColor: appSurface(context),
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
       builder: (ctx) => StatefulBuilder(
         builder: (_, setModal) => Padding(

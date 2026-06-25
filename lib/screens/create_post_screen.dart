@@ -168,7 +168,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: Colors.white,
+      backgroundColor: appSurface(context),
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
@@ -194,7 +194,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
             const SizedBox(height: 16),
             Text(info['title'] ?? 'Sem título',
               textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: Color(0xFF1A1A1A))),
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: appText(context))),
             const SizedBox(height: 4),
             Text(info['authors']?.join(', ') ?? 'Autor desconhecido',
               style: const TextStyle(fontSize: 13, color: Color(0xFF888888))),
@@ -202,7 +202,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
             if ((info['description'] ?? '').isNotEmpty)
               Text(info['description'] ?? '',
                 maxLines: 4, overflow: TextOverflow.ellipsis,
-                style: const TextStyle(fontSize: 13, color: Color(0xFF555555), height: 1.55)),
+                style: TextStyle(fontSize: 13, color: appText(context), height: 1.55)),
             const SizedBox(height: 20),
             SizedBox(
               width: double.infinity,
@@ -370,11 +370,11 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                       color: const Color(0xFFF5F5F5),
                       borderRadius: BorderRadius.circular(20),
                     ),
-                    child: const Row(
+                    child: Row(
                       children: [
                         Icon(Icons.image_outlined, size: 18, color: Color(0xFF555555)),
                         SizedBox(width: 6),
-                        Text('Foto', style: TextStyle(fontSize: 13, color: Color(0xFF555555), fontWeight: FontWeight.w600)),
+                        Text('Foto', style: TextStyle(fontSize: 13, color: appText(context), fontWeight: FontWeight.w600)),
                       ],
                     ),
                   ),
@@ -405,9 +405,9 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                       color: const Color(0xFFF0F0F0),
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    child: const Center(
+                    child: Center(
                       child: Text('Pesquisar',
-                        style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: Color(0xFF1A1A1A))),
+                        style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: appText(context))),
                     ),
                   ),
                 ),

@@ -164,7 +164,7 @@ class _HomeScreenState extends State<HomeScreen> {
       // Mostra o post relacionado
       showModalBottomSheet(
         context: context,
-        backgroundColor: Colors.white,
+        backgroundColor: appSurface(context),
         shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
         builder: (_) => Padding(
           padding: const EdgeInsets.fromLTRB(20, 20, 20, 40),
@@ -179,7 +179,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   _notifIcon(n.type),
                   const SizedBox(width: 8),
-                  Text(n.text, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: Color(0xFF1A1A1A))),
+                  Text(n.text, style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: appText(context))),
                 ],
               ),
               const SizedBox(height: 16),
@@ -195,10 +195,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(n.postAutor ?? '',
-                        style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: Color(0xFF1A1A1A))),
+                        style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: appText(context))),
                       const SizedBox(height: 4),
                       Text(n.postTexto!,
-                        style: const TextStyle(fontSize: 13, color: Color(0xFF555555), height: 1.45)),
+                        style: TextStyle(fontSize: 13, color: appText(context), height: 1.45)),
                     ],
                   ),
                 ),
@@ -225,7 +225,7 @@ class _HomeScreenState extends State<HomeScreen> {
     HapticFeedback.lightImpact();
     showModalBottomSheet(
       context: context,
-      backgroundColor: Colors.white,
+      backgroundColor: appSurface(context),
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
       builder: (_) => _MenuSheet(parentContext: context),
     );
@@ -473,7 +473,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final letter = name.isNotEmpty ? name[0].toUpperCase() : 'U';
     showModalBottomSheet(
       context: context,
-      backgroundColor: Colors.white,
+      backgroundColor: appSurface(context),
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
       builder: (ctx) => FutureBuilder<DocumentSnapshot>(
         future: FirebaseFirestore.instance.collection('users').doc(userId).get(),
@@ -499,7 +499,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     : CircleAvatar(radius: 32, backgroundColor: const Color(0xFF1A1A1A),
                         child: Text(letter, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 22))),
                 const SizedBox(height: 10),
-                Text(name, style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w800, color: Color(0xFF1A1A1A))),
+                Text(name, style: TextStyle(fontSize: 17, fontWeight: FontWeight.w800, color: appText(context))),
                 const SizedBox(height: 20),
                 // Livro que está a ler
                 if (snap.connectionState == ConnectionState.waiting)
@@ -526,7 +526,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 style: const TextStyle(fontSize: 11, color: Color(0xFF888888), fontWeight: FontWeight.w600)),
                               const SizedBox(height: 2),
                               Text(currentBook,
-                                style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w700, color: Color(0xFF1A1A1A))),
+                                style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700, color: appText(context))),
                             ],
                           ),
                         ),
@@ -662,7 +662,7 @@ class _FollowStoryAvatar extends StatelessWidget {
             ),
             const SizedBox(height: 4),
             Text(name, maxLines: 1, overflow: TextOverflow.ellipsis,
-              style: const TextStyle(fontSize: 11, color: Color(0xFF1A1A1A))),
+              style: TextStyle(fontSize: 11, color: appText(context))),
           ],
         ),
       ),
@@ -744,7 +744,7 @@ class _MyStoryBtnState extends State<_MyStoryBtn> {
                   : const BoxDecoration(shape: BoxShape.circle, color: Color(0xFFDDDDDD)),
               child: Container(
                 padding: const EdgeInsets.all(2),
-                decoration: const BoxDecoration(color: Colors.white, shape: BoxShape.circle),
+                decoration: BoxDecoration(color: appBg(context), shape: BoxShape.circle),
                 child: Stack(
                   children: [
                     Container(
@@ -784,7 +784,7 @@ class _MyStoryBtnState extends State<_MyStoryBtn> {
             ),
             const SizedBox(height: 5),
             Text(label,
-              style: const TextStyle(fontSize: 11, color: Color(0xFF1A1A1A), fontWeight: FontWeight.w500),
+              style: TextStyle(fontSize: 11, color: appText(context), fontWeight: FontWeight.w500),
               maxLines: 1, overflow: TextOverflow.ellipsis),
           ],
         ),
@@ -799,7 +799,7 @@ class _MyStoryBtnState extends State<_MyStoryBtn> {
         : _publishedStatus == 'want' ? '🔖 Quero ler' : '📖 A ler agora';
     showModalBottomSheet(
       context: context,
-      backgroundColor: Colors.white,
+      backgroundColor: appSurface(context),
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
       builder: (ctx) => Padding(
         padding: const EdgeInsets.fromLTRB(24, 16, 24, 36),
@@ -814,7 +814,7 @@ class _MyStoryBtnState extends State<_MyStoryBtn> {
                 : CircleAvatar(radius: 32, backgroundColor: const Color(0xFF1A1A1A),
                     child: Text(_userInitial, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 22))),
             const SizedBox(height: 10),
-            const Text('O teu story', style: TextStyle(fontSize: 17, fontWeight: FontWeight.w800, color: Color(0xFF1A1A1A))),
+            Text('O teu story', style: TextStyle(fontSize: 17, fontWeight: FontWeight.w800, color: appText(context))),
             const SizedBox(height: 20),
             Container(
               width: double.infinity,
@@ -836,7 +836,7 @@ class _MyStoryBtnState extends State<_MyStoryBtn> {
                           style: const TextStyle(fontSize: 11, color: Color(0xFF888888), fontWeight: FontWeight.w600)),
                         const SizedBox(height: 2),
                         Text(_publishedBook,
-                          style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w700, color: Color(0xFF1A1A1A))),
+                          style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700, color: appText(context))),
                       ],
                     ),
                   ),
@@ -892,7 +892,7 @@ class _MyStoryBtnState extends State<_MyStoryBtn> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: Colors.white,
+      backgroundColor: appSurface(context),
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
       builder: (ctx) => StatefulBuilder(
         builder: (_, setState) => Padding(
@@ -906,8 +906,8 @@ class _MyStoryBtnState extends State<_MyStoryBtn> {
               Container(width: 36, height: 4,
                 margin: const EdgeInsets.only(bottom: 20),
                 decoration: BoxDecoration(color: const Color(0xFFDDDDDD), borderRadius: BorderRadius.circular(2))),
-              const Text('O meu estado de leitura',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: Color(0xFF1A1A1A))),
+              Text('O meu estado de leitura',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: appText(context))),
               const SizedBox(height: 6),
               const Text('Partilha o que estás a ler com os teus seguidores',
                 textAlign: TextAlign.center,
@@ -1164,7 +1164,7 @@ class _MenuSheet extends StatelessWidget {
   void _showHelp(BuildContext ctx) {
     showModalBottomSheet(
       context: ctx,
-      backgroundColor: Colors.white,
+      backgroundColor: appSurface(ctx),
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
       builder: (_) => Padding(
         padding: const EdgeInsets.fromLTRB(24, 20, 24, 40),
@@ -1175,7 +1175,7 @@ class _MenuSheet extends StatelessWidget {
             Container(width: 36, height: 4,
               margin: const EdgeInsets.only(bottom: 16),
               decoration: BoxDecoration(color: const Color(0xFFDDDDDD), borderRadius: BorderRadius.circular(2))),
-            const Text('Ajuda', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800, color: Color(0xFF1A1A1A))),
+            Text('Ajuda', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800, color: appText(ctx))),
             const SizedBox(height: 16),
             const _HelpRow(q: 'Como publicar um post?', a: 'Toca no botão + na barra de navegação.'),
             const _HelpRow(q: 'Como guardar um post?', a: 'Toca no ícone 🔖 em qualquer post.'),
@@ -1191,7 +1191,7 @@ class _MenuSheet extends StatelessWidget {
     showDialog(
       context: ctx,
       builder: (_) => AlertDialog(
-        backgroundColor: Colors.white,
+        backgroundColor: appSurface(ctx),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         title: const Text('Terminar sessão', style: TextStyle(fontWeight: FontWeight.w700)),
         content: const Text('Tens a certeza que queres sair?'),
@@ -1224,7 +1224,7 @@ class _HelpRow extends StatelessWidget {
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(q, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: Color(0xFF1A1A1A))),
+        Text(q, style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: appText(context))),
         const SizedBox(height: 2),
         Text(a, style: const TextStyle(fontSize: 13, color: Color(0xFF777777))),
       ],
@@ -1305,7 +1305,7 @@ class _SearchSheetState extends State<_SearchSheet> with SingleTickerProviderSta
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: Colors.white,
+      backgroundColor: appSurface(context),
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
       builder: (_) => DraggableScrollableSheet(
         initialChildSize: 0.7,
@@ -1328,7 +1328,7 @@ class _SearchSheetState extends State<_SearchSheet> with SingleTickerProviderSta
                 const Icon(Icons.book, size: 80, color: Colors.grey),
               const SizedBox(height: 14),
               Text(info['title'] ?? '', textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: Color(0xFF1A1A1A))),
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: appText(context))),
               const SizedBox(height: 4),
               Text(info['authors']?.join(', ') ?? '', style: const TextStyle(fontSize: 13, color: Color(0xFF888888))),
               const SizedBox(height: 20),
@@ -1345,7 +1345,7 @@ class _SearchSheetState extends State<_SearchSheet> with SingleTickerProviderSta
                 const Align(alignment: Alignment.centerLeft,
                   child: Text('Sinopse', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700))),
                 const SizedBox(height: 8),
-                Text(info['description'] ?? '', style: const TextStyle(fontSize: 13, color: Color(0xFF555555), height: 1.6)),
+                Text(info['description'] ?? '', style: TextStyle(fontSize: 13, color: appText(context), height: 1.6)),
               ],
             ],
           ),

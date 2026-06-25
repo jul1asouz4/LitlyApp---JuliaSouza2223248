@@ -37,7 +37,7 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen> {
     String? _reason;
     showModalBottomSheet(
       context: context,
-      backgroundColor: Colors.white,
+      backgroundColor: appSurface(context),
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
       builder: (ctx) => StatefulBuilder(
         builder: (_, setModal) => Padding(
@@ -209,7 +209,7 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen> {
                       ],
                       if (bio.isNotEmpty) ...[
                         const SizedBox(height: 8),
-                        Text(bio, textAlign: TextAlign.center, style: const TextStyle(fontSize: 13, color: Color(0xFF555555), height: 1.5)),
+                        Text(bio, textAlign: TextAlign.center, style: TextStyle(fontSize: 13, color: appText(context), height: 1.5)),
                       ],
                       const SizedBox(height: 16),
 
@@ -460,7 +460,7 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen> {
                             ),
                             const SizedBox(height: 4),
                             Text(title, maxLines: 1, overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w600, color: Color(0xFF1A1A1A))),
+                              style: TextStyle(fontSize: 10, fontWeight: FontWeight.w600, color: appText(context))),
                           ],
                         );
                       },

@@ -313,7 +313,7 @@ class _GenreBar extends StatelessWidget {
           borderRadius: BorderRadius.circular(4),
           child: LinearProgressIndicator(
             value: pct, minHeight: 7,
-            backgroundColor: const Color(0xFFEEEEEE),
+            backgroundColor: isDark(context) ? const Color(0xFF2C2C2C) : const Color(0xFFEEEEEE),
             valueColor: AlwaysStoppedAnimation<Color>(appText(context)),
           ),
         ),
@@ -366,7 +366,7 @@ class _GoalWidget extends StatelessWidget {
             borderRadius: BorderRadius.circular(6),
             child: LinearProgressIndicator(
               value: pct, minHeight: 10,
-              backgroundColor: const Color(0xFFEEEEEE),
+              backgroundColor: isDark(context) ? const Color(0xFF2C2C2C) : const Color(0xFFEEEEEE),
               valueColor: AlwaysStoppedAnimation<Color>(appText(context)),
             ),
           ),

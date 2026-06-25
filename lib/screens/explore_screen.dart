@@ -108,7 +108,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: Colors.white,
+      backgroundColor: appSurface(context),
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
       builder: (_) => StatefulBuilder(
         builder: (ctx, setModal) => DraggableScrollableSheet(
@@ -152,7 +152,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
 
                   Text(info['title'] ?? 'Sem título',
                     textAlign: TextAlign.center,
-                    style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800, color: Color(0xFF1A1A1A), height: 1.3)),
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800, color: appText(context), height: 1.3)),
                   const SizedBox(height: 5),
                   Text(info['authors']?.join(', ') ?? 'Autor desconhecido',
                     style: const TextStyle(fontSize: 14, color: Color(0xFF888888))),
@@ -201,14 +201,14 @@ class _ExploreScreenState extends State<ExploreScreen> {
                   const SizedBox(height: 22),
 
                   // Sinopse
-                  const Align(
+                  Align(
                     alignment: Alignment.centerLeft,
-                    child: Text('Sinopse', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Color(0xFF1A1A1A))),
+                    child: Text('Sinopse', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: appText(context))),
                   ),
                   const SizedBox(height: 8),
                   Text(
                     info['description'] ?? 'Sem descrição disponível para este livro.',
-                    style: const TextStyle(fontSize: 14, color: Color(0xFF555555), height: 1.65),
+                    style: TextStyle(fontSize: 14, color: appText(context), height: 1.65),
                   ),
 
                   // Meta info
