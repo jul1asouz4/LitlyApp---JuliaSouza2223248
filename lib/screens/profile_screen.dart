@@ -84,7 +84,7 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
   }
 
   Widget _bookBg() => Container(
-    decoration: BoxDecoration(color: const Color(0xFFEEEEEE), borderRadius: BorderRadius.circular(8)),
+    decoration: BoxDecoration(color: appField(context), borderRadius: BorderRadius.circular(8)),
     child: const Center(child: Icon(Icons.book, color: Colors.grey, size: 28)),
   );
 
@@ -179,7 +179,7 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                 },
               );
             }),
-            const Divider(height: 20, color: Color(0xFFF0F0F0)),
+            Divider(height: 20, color: appField(context)),
             ListTile(
               contentPadding: EdgeInsets.zero,
               leading: const Icon(Icons.delete_outline_rounded, color: Color(0xFFE05D5D)),
@@ -809,7 +809,7 @@ class _FollowListScreenState extends State<_FollowListScreen> {
             child: Container(
               height: 40,
               decoration: BoxDecoration(
-                color: const Color(0xFFF0F0F0),
+                color: appField(context),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: TextField(
@@ -856,7 +856,7 @@ class _UserRowState extends State<_UserRow> {
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       leading: CircleAvatar(
         radius: 22,
-        backgroundColor: const Color(0xFFEEEEEE),
+        backgroundColor: appField(context),
         child: Text(widget.user.name[0],
           style: TextStyle(color: appText(context), fontWeight: FontWeight.bold, fontSize: 16)),
       ),
@@ -870,7 +870,7 @@ class _UserRowState extends State<_UserRow> {
           duration: const Duration(milliseconds: 180),
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
           decoration: BoxDecoration(
-            color: _following ? const Color(0xFFEEEEEE) : const Color(0xFF1A1A1A),
+            color: _following ? appField(context) : const Color(0xFF1A1A1A),
             borderRadius: BorderRadius.circular(8),
           ),
           child: Text(
@@ -1005,7 +1005,7 @@ class SettingsScreen extends StatelessWidget {
                         },
                       ),
                       if (idx < (s['items'] as List).length - 1)
-                        const Divider(height: 1, indent: 56, color: Color(0xFFF5F5F5)),
+                        Divider(height: 1, indent: 56, color: appField(context)),
                     ],
                   );
                 }).toList(),
@@ -1104,9 +1104,9 @@ class _EditField extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Container(
     decoration: BoxDecoration(
-      color: const Color(0xFFF5F5F5),
+      color: appField(context),
       borderRadius: BorderRadius.circular(10),
-      border: Border.all(color: const Color(0xFFEEEEEE)),
+      border: Border.all(color: appField(context)),
     ),
     child: TextField(
       controller: controller,

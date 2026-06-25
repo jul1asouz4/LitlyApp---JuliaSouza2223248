@@ -87,7 +87,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800, color: appText(context))),
               ),
             ),
-            const Divider(height: 1, color: Color(0xFFF0F0F0)),
+            Divider(height: 1, color: appField(context)),
             Expanded(
               child: StreamBuilder<QuerySnapshot>(
                 stream: UserService.notificationsStream(),
@@ -187,9 +187,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 Container(
                   padding: const EdgeInsets.all(14),
                   decoration: BoxDecoration(
-                    color: const Color(0xFFF8F8F8),
+                    color: appField(context),
                     borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: const Color(0xFFEEEEEE)),
+                    border: Border.all(color: appField(context)),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -510,9 +510,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     width: double.infinity,
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      color: const Color(0xFFF8F8F8),
+                      color: appField(context),
                       borderRadius: BorderRadius.circular(14),
-                      border: Border.all(color: const Color(0xFFEEEEEE)),
+                      border: Border.all(color: appField(context)),
                     ),
                     child: Row(
                       children: [
@@ -601,9 +601,9 @@ class _StoryLikeButton extends StatelessWidget {
           child: Container(
             height: 46,
             decoration: BoxDecoration(
-              color: const Color(0xFFF8F8F8),
+              color: appField(context),
               borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: const Color(0xFFEEEEEE)),
+              border: Border.all(color: appField(context)),
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -820,9 +820,9 @@ class _MyStoryBtnState extends State<_MyStoryBtn> {
               width: double.infinity,
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: const Color(0xFFF8F8F8),
+                color: appField(context),
                 borderRadius: BorderRadius.circular(14),
-                border: Border.all(color: const Color(0xFFEEEEEE)),
+                border: Border.all(color: appField(context)),
               ),
               child: Row(
                 children: [
@@ -916,7 +916,7 @@ class _MyStoryBtnState extends State<_MyStoryBtn> {
               // Campo de livro
               Container(
                 decoration: BoxDecoration(
-                  color: const Color(0xFFF5F5F5),
+                  color: appField(context),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: TextField(
@@ -1009,7 +1009,7 @@ class _StatusChip extends StatelessWidget {
       duration: const Duration(milliseconds: 160),
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
-        color: selected ? const Color(0xFF1A1A1A) : const Color(0xFFF0F0F0),
+        color: selected ? const Color(0xFF1A1A1A) : appField(context),
         borderRadius: BorderRadius.circular(20),
       ),
       child: Text(label,
@@ -1140,7 +1140,7 @@ class _MenuSheet extends StatelessWidget {
             leading: Container(
               width: 38, height: 38,
               decoration: BoxDecoration(
-                color: const Color(0xFFF5F5F5),
+                color: appField(context),
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Icon(e.$1,
@@ -1585,7 +1585,7 @@ class _SearchSheetState extends State<_SearchSheet> with SingleTickerProviderSta
   }
 
   Widget _bookBg() => Container(
-    decoration: BoxDecoration(color: const Color(0xFFEEEEEE), borderRadius: BorderRadius.circular(8)),
+    decoration: BoxDecoration(color: appField(context), borderRadius: BorderRadius.circular(8)),
     child: const Center(child: Icon(Icons.book, color: Colors.grey, size: 24)),
   );
 }
@@ -1655,7 +1655,7 @@ class _HomeBookStatusPickerState extends State<_HomeBookStatusPicker> {
                 duration: const Duration(milliseconds: 180),
                 padding: const EdgeInsets.symmetric(vertical: 10),
                 decoration: BoxDecoration(
-                  color: sel ? const Color(0xFF1A1A1A) : const Color(0xFFF0F0F0),
+                  color: sel ? const Color(0xFF1A1A1A) : appField(context),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Column(

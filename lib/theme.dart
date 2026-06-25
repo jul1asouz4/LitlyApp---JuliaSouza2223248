@@ -50,6 +50,10 @@ Color appText(BuildContext c) => isDark(c) ? const Color(0xFFF0F0F0) : const Col
 /// Bordas e divisórias
 Color appBorder(BuildContext c) => isDark(c) ? const Color(0xFF2C2C2C) : const Color(0xFFF0F0F0);
 
+/// Preenchimento subtil (chips, campos, cartões internos, placeholders).
+/// Claro no tema claro, cinza-escuro no tema escuro.
+Color appField(BuildContext c) => isDark(c) ? const Color(0xFF2A2A2A) : const Color(0xFFF0F0F0);
+
 /// Cor de "destaque escuro" (botões pretos / avatares). Inverte no modo escuro
 /// para continuar legível sobre fundo escuro.
 Color appAccent(BuildContext c) => isDark(c) ? const Color(0xFF2A2A2A) : const Color(0xFF1A1A1A);

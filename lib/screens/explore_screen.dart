@@ -137,14 +137,14 @@ class _ExploreScreenState extends State<ExploreScreen> {
                       child: Image.network(imageUrl, height: 200, fit: BoxFit.contain,
                         errorBuilder: (_, __, ___) => Container(
                           height: 200, width: 130,
-                          decoration: BoxDecoration(color: const Color(0xFFEEEEEE), borderRadius: BorderRadius.circular(10)),
+                          decoration: BoxDecoration(color: appField(context), borderRadius: BorderRadius.circular(10)),
                           child: const Icon(Icons.book, size: 60, color: Colors.grey),
                         )),
                     )
                   else
                     Container(
                       height: 200, width: 130,
-                      decoration: BoxDecoration(color: const Color(0xFFEEEEEE), borderRadius: BorderRadius.circular(10)),
+                      decoration: BoxDecoration(color: appField(context), borderRadius: BorderRadius.circular(10)),
                       child: const Icon(Icons.book, size: 60, color: Colors.grey),
                     ),
 
@@ -637,7 +637,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
 
   Widget _bookBg() => Container(
     decoration: BoxDecoration(
-      color: const Color(0xFFEEEEEE),
+      color: appField(context),
       borderRadius: BorderRadius.circular(10),
     ),
     child: const Center(child: Icon(Icons.book, color: Colors.grey, size: 28)),
@@ -747,7 +747,7 @@ class _ReadStatusPickerState extends State<_ReadStatusPicker> {
                 duration: const Duration(milliseconds: 180),
                 padding: const EdgeInsets.symmetric(vertical: 10),
                 decoration: BoxDecoration(
-                  color: sel ? const Color(0xFF1A1A1A) : const Color(0xFFF0F0F0),
+                  color: sel ? const Color(0xFF1A1A1A) : appField(context),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Column(
@@ -779,7 +779,7 @@ class _MetaChip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       decoration: BoxDecoration(
-        color: const Color(0xFFF5F5F5),
+        color: appField(context),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Row(

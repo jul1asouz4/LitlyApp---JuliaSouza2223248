@@ -128,7 +128,7 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen> {
             ],
           ),
         ],
-        bottom: PreferredSize(preferredSize: const Size.fromHeight(1), child: Container(height: 1, color: const Color(0xFFF0F0F0))),
+        bottom: PreferredSize(preferredSize: const Size.fromHeight(1), child: Container(height: 1, color: appField(context))),
       ),
       body: StreamBuilder<DocumentSnapshot>(
         stream: FirebaseFirestore.instance.collection('users')
@@ -448,9 +448,9 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen> {
                                 ClipRRect(borderRadius: BorderRadius.circular(8),
                                   child: cover.toString().isNotEmpty
                                       ? Image.network(cover, fit: BoxFit.cover,
-                                          errorBuilder: (_, __, ___) => Container(color: const Color(0xFFEEEEEE),
+                                          errorBuilder: (_, __, ___) => Container(color: appField(context),
                                             child: const Icon(Icons.book, color: Colors.grey, size: 26)))
-                                      : Container(color: const Color(0xFFEEEEEE),
+                                      : Container(color: appField(context),
                                           child: const Icon(Icons.book, color: Colors.grey, size: 26))),
                                 Positioned(top: 4, right: 4,
                                   child: Container(padding: const EdgeInsets.all(3),

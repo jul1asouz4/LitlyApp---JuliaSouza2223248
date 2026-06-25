@@ -367,7 +367,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
                     decoration: BoxDecoration(
-                      color: const Color(0xFFF5F5F5),
+                      color: appField(context),
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Row(
@@ -402,7 +402,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                     height: 30,
                     padding: const EdgeInsets.symmetric(horizontal: 12),
                     decoration: BoxDecoration(
-                      color: const Color(0xFFF0F0F0),
+                      color: appField(context),
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Center(
@@ -443,8 +443,8 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                         : ListView.separated(
                             padding: const EdgeInsets.symmetric(vertical: 4),
                             itemCount: _books.length,
-                            separatorBuilder: (_, __) => const Divider(
-                              height: 1, indent: 76, endIndent: 0, color: Color(0xFFF5F5F5)),
+                            separatorBuilder: (_, __) => Divider(
+                              height: 1, indent: 76, endIndent: 0, color: appField(context)),
                             itemBuilder: (_, i) {
                               final book = _books[i];
                               final info = book['volumeInfo'];
@@ -571,7 +571,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   Widget _placeholder() => Container(
     width: 42, height: 60,
     decoration: BoxDecoration(
-      color: const Color(0xFFEEEEEE),
+      color: appField(context),
       borderRadius: BorderRadius.circular(5),
     ),
     child: const Icon(Icons.book, color: Colors.grey, size: 20),

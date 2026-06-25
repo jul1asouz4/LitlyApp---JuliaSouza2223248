@@ -46,7 +46,7 @@ class SavedPostsScreen extends StatelessWidget {
                   Container(
                     width: 72, height: 72,
                     decoration: BoxDecoration(
-                      color: const Color(0xFFF0F0F0),
+                      color: appField(context),
                       borderRadius: BorderRadius.circular(18),
                     ),
                     child: const Icon(Icons.bookmark_border_rounded, size: 34, color: Color(0xFFBBBBBB)),

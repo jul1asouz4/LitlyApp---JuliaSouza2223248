@@ -272,9 +272,9 @@ class _BookStatusListScreen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(8),
                       child: cover.isNotEmpty
                           ? Image.network(cover, width: double.infinity, fit: BoxFit.cover,
-                              errorBuilder: (_, __, ___) => Container(color: const Color(0xFFEEEEEE),
+                              errorBuilder: (_, __, ___) => Container(color: appField(context),
                                 child: const Icon(Icons.book, color: Colors.grey)))
-                          : Container(color: const Color(0xFFEEEEEE),
+                          : Container(color: appField(context),
                               child: const Icon(Icons.book, color: Colors.grey)),
                     ),
                   ),

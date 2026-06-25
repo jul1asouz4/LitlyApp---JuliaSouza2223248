@@ -57,7 +57,7 @@ class _ChatListScreenState extends State<ChatListScreen> with SingleTickerProvid
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: Container(
                     height: 42,
-                    decoration: BoxDecoration(color: const Color(0xFFF0F0F0), borderRadius: BorderRadius.circular(12)),
+                    decoration: BoxDecoration(color: appField(context), borderRadius: BorderRadius.circular(12)),
                     child: TextField(
                       controller: searchCtrl,
                       autofocus: true,

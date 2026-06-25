@@ -746,7 +746,7 @@ class _CommentsSheetState extends State<_CommentsSheet> {
               ),
             ),
             const SizedBox(height: 8),
-            const Divider(height: 1, color: Color(0xFFF0F0F0)),
+            Divider(height: 1, color: appField(context)),
             Expanded(
               child: StreamBuilder<QuerySnapshot>(
                 stream: _db.collection('posts').doc(widget.postId).collection('comments')
@@ -818,9 +818,9 @@ class _CommentsSheetState extends State<_CommentsSheet> {
               ),
             ),
             Container(
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                border: Border(top: BorderSide(color: Color(0xFFF0F0F0))),
+              decoration: BoxDecoration(
+                color: appSurface(context),
+                border: Border(top: BorderSide(color: appField(context))),
               ),
               padding: const EdgeInsets.fromLTRB(16, 10, 16, 16),
               child: Row(
@@ -836,7 +836,7 @@ class _CommentsSheetState extends State<_CommentsSheet> {
                   Expanded(
                     child: Container(
                       decoration: BoxDecoration(
-                        color: const Color(0xFFF5F5F5),
+                        color: appField(context),
                         borderRadius: BorderRadius.circular(22),
                       ),
                       child: TextField(
