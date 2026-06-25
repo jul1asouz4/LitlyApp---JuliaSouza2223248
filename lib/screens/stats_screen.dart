@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../theme.dart';
+import '../widgets/post_card.dart';
 
 class StatsScreen extends StatelessWidget {
   const StatsScreen({super.key});
@@ -61,15 +62,19 @@ class StatsScreen extends StatelessWidget {
                   _SectionTitle('Resumo'),
                   const SizedBox(height: 10),
                   Row(children: [
-                    _StatCard(value: '$read', label: 'Livros lidos', icon: Icons.menu_book_rounded, color: appText(context)),
+                    _StatCard(value: '$read', label: 'Livros lidos', icon: Icons.menu_book_rounded, color: appText(context),
+                      onTap: () => _openBookList(context, 'done', 'Livros lidos')),
                     const SizedBox(width: 10),
-                    _StatCard(value: '${books.length}', label: 'Livros na biblioteca', icon: Icons.library_books_outlined, color: const Color(0xFF555555)),
+                    _StatCard(value: '${books.length}', label: 'Livros na biblioteca', icon: Icons.library_books_outlined, color: appText(context),
+                      onTap: () => _openBookList(context, 'all', 'Livros na biblioteca')),
                   ]),
                   const SizedBox(height: 10),
                   Row(children: [
-                    _StatCard(value: '${posts.length}', label: 'Posts publicados', icon: Icons.edit_outlined, color: appText(context)),
+                    _StatCard(value: '${posts.length}', label: 'Posts publicados', icon: Icons.edit_outlined, color: appText(context),
+                      onTap: () => _openMyPosts(context, title: 'Posts publicados')),
                     const SizedBox(width: 10),
-                    _StatCard(value: '$likesReceived', label: 'Gostos recebidos', icon: Icons.favorite_rounded, color: const Color(0xFFE05D5D)),
+                    _StatCard(value: '$likesReceived', label: 'Gostos recebidos', icon: Icons.favorite_rounded, color: const Color(0xFFE05D5D),
+                      onTap: () => _openMyPosts(context, title: 'Gostos recebidos', likedOnly: true)),
                   ]),
                   const SizedBox(height: 24),
 
@@ -152,6 +157,11 @@ class StatsScreen extends StatelessWidget {
       builder: (_) => _BookStatusListScreen(uid: _uid, status: status, title: title)));
   }
 
+  void _openMyPosts(BuildContext context, {required String title, bool likedOnly = false}) {
+    Navigator.push(context, MaterialPageRoute(
+      builder: (_) => _MyPostsListScreen(uid: _uid, title: title, likedOnly: likedOnly)));
+  }
+
   List<Widget> _topGenres(Map<String, int> genres, int total) {
     final sorted = genres.entries.toList()..sort((a, b) => b.value.compareTo(a.value));
     return sorted.take(4).map((e) => _GenreBar(genre: e.key, pct: total > 0 ? e.value / total : 0)).toList();
@@ -170,25 +180,34 @@ class _StatCard extends StatelessWidget {
   final String value, label;
   final IconData icon;
   final Color color;
-  const _StatCard({required this.value, required this.label, required this.icon, required this.color});
+  final VoidCallback? onTap;
+  const _StatCard({required this.value, required this.label, required this.icon, required this.color, this.onTap});
   @override
   Widget build(BuildContext context) => Expanded(
-    child: Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: appSurface(context),
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: appBorder(context)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Icon(icon, color: color, size: 22),
-          const SizedBox(height: 10),
-          Text(value, style: TextStyle(fontSize: 26, fontWeight: FontWeight.w800, color: appText(context))),
-          const SizedBox(height: 2),
-          Text(label, style: const TextStyle(fontSize: 12, color: Color(0xFF888888))),
-        ],
+    child: GestureDetector(
+      onTap: onTap,
+      behavior: HitTestBehavior.opaque,
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: appSurface(context),
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(color: appBorder(context)),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(children: [
+              Icon(icon, color: color, size: 22),
+              const Spacer(),
+              if (onTap != null) const Icon(Icons.chevron_right, color: Color(0xFFAAAAAA), size: 18),
+            ]),
+            const SizedBox(height: 10),
+            Text(value, style: TextStyle(fontSize: 26, fontWeight: FontWeight.w800, color: appText(context))),
+            const SizedBox(height: 2),
+            Text(label, style: const TextStyle(fontSize: 12, color: Color(0xFF888888))),
+          ],
+        ),
       ),
     ),
   );
@@ -247,9 +266,11 @@ class _BookStatusListScreen extends StatelessWidget {
         centerTitle: true,
       ),
       body: StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance
-            .collection('users').doc(uid).collection('books')
-            .where('status', isEqualTo: status).snapshots(),
+        stream: status == 'all'
+            ? FirebaseFirestore.instance.collection('users').doc(uid).collection('books').snapshots()
+            : FirebaseFirestore.instance
+                .collection('users').doc(uid).collection('books')
+                .where('status', isEqualTo: status).snapshots(),
         builder: (_, snap) {
           final docs = snap.data?.docs ?? [];
           if (docs.isEmpty) {
@@ -378,6 +399,66 @@ class _GoalWidget extends StatelessWidget {
             style: const TextStyle(fontSize: 13, color: Color(0xFF888888)),
           ),
         ],
+      ),
+    );
+  }
+}
+
+// ── Lista de posts (publicados / com gostos) ─────────────────────────────────
+class _MyPostsListScreen extends StatelessWidget {
+  final String uid, title;
+  final bool likedOnly;
+  const _MyPostsListScreen({required this.uid, required this.title, this.likedOnly = false});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: appBg(context),
+      appBar: AppBar(
+        backgroundColor: appSurface(context),
+        elevation: 0,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios_new, size: 18, color: appText(context)),
+          onPressed: () => Navigator.pop(context),
+        ),
+        title: Text(title, style: TextStyle(color: appText(context), fontWeight: FontWeight.w700, fontSize: 16)),
+        centerTitle: true,
+      ),
+      body: StreamBuilder<QuerySnapshot>(
+        stream: FirebaseFirestore.instance
+            .collection('posts').where('authorId', isEqualTo: uid).snapshots(),
+        builder: (_, snap) {
+          var docs = snap.data?.docs ?? [];
+          if (likedOnly) {
+            docs = docs.where((d) =>
+                List.from((d.data() as Map<String, dynamic>)['likedBy'] ?? []).isNotEmpty).toList();
+          }
+          // Mais recentes primeiro
+          docs.sort((a, b) {
+            final ta = (a.data() as Map<String, dynamic>)['createdAt'];
+            final tb = (b.data() as Map<String, dynamic>)['createdAt'];
+            if (ta is Timestamp && tb is Timestamp) return tb.compareTo(ta);
+            return 0;
+          });
+          if (docs.isEmpty) {
+            return Center(child: Text(
+              likedOnly ? 'Ainda não recebeste gostos.' : 'Ainda não publicaste nada.',
+              style: const TextStyle(color: Color(0xFFAAAAAA), fontSize: 14)));
+          }
+          return ListView.builder(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            itemCount: docs.length,
+            itemBuilder: (_, i) {
+              final d = docs[i].data() as Map<String, dynamic>;
+              return PostCard(
+                key: ValueKey(docs[i].id),
+                postId: docs[i].id,
+                data: d,
+                isOwner: true,
+              );
+            },
+          );
+        },
       ),
     );
   }
