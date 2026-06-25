@@ -47,7 +47,6 @@
 |:---:|:---:|:---:|
 | ![Publicação](screenshots/publicacao.png) | ![Chat](screenshots/chat.png) | ![Modo Escuro](screenshots/dark.png) |
 
-> As imagens encontram-se na pasta [`screenshots/`](screenshots/). Para as substituir pelas tuas, coloca os ficheiros `.png` com estes nomes nessa pasta.
 
 ---
 
