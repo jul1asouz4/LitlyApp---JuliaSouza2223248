@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'post_service.dart';
 
 class AdminService {
   static final _db = FirebaseFirestore.instance;
@@ -22,7 +23,8 @@ class AdminService {
 
   // Ações de moderação
   static Future<void> deletePost(String postId) async {
-    await _db.collection('posts').doc(postId).delete();
+    // Apaga também as notificações associadas ao post
+    await PostService.deletePost(postId);
   }
 
   static Future<void> dismissReport(String reportId) async {

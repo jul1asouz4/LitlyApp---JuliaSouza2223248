@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../screens/other_user_profile_screen.dart';
 import '../services/book_service.dart';
+import '../services/post_service.dart';
 import '../theme.dart';
 
 class PostCard extends StatefulWidget {
@@ -644,7 +645,8 @@ class _PostCardState extends State<PostCard> {
                 title: const Text('Apagar post', style: TextStyle(color: Color(0xFFE05D5D))),
                 onTap: () async {
                   Navigator.pop(context);
-                  await _db.collection('posts').doc(widget.postId).delete();
+                  await PostService.deletePost(widget.postId,
+                      authorId: (widget.data['authorId'] ?? '').toString());
                   widget.onDelete?.call();
                 },
               ),

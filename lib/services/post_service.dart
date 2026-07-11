@@ -4,6 +4,26 @@ import 'package:firebase_auth/firebase_auth.dart';
 class PostService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
+  /// Apaga um post e limpa as notificações associadas (gostos/comentários),
+  /// que ficam na subcoleção de notificações do autor do post.
+  static Future<void> deletePost(String postId, {String? authorId}) async {
+    final db = FirebaseFirestore.instance;
+    // Se não sabemos o autor, lê-o do próprio post antes de apagar.
+    var author = authorId ?? '';
+    if (author.isEmpty) {
+      final doc = await db.collection('posts').doc(postId).get();
+      author = (doc.data()?['authorId'] ?? '').toString();
+    }
+    if (author.isNotEmpty) {
+      final notifs = await db.collection('users').doc(author)
+          .collection('notifications').where('postId', isEqualTo: postId).get();
+      for (final n in notifs.docs) {
+        await n.reference.delete();
+      }
+    }
+    await db.collection('posts').doc(postId).delete();
+  }
+
   Future<void> publishPost({required String text, required dynamic book, String? imageUrl}) async {
     final user = FirebaseAuth.instance.currentUser;
     // Lê o nome/foto/privacidade atuais do Firestore (mais fiável que o Auth)
