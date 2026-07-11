@@ -15,26 +15,38 @@ class BookService {
 
   Future<List<dynamic>> searchBooks(String query) async {
     final urlString = "$_baseUrl${Uri.encodeComponent(query)}&key=$_apiKey&maxResults=20";
-    try {
-      final response = await http.get(Uri.parse(urlString));
-      if (response.statusCode == 200) {
-        final data = json.decode(response.body);
-        final items = (data['items'] ?? []) as List;
-        for (final item in items) {
-          final id = item['id'] as String? ?? '';
-          final url = coverFor(id);
-          item['volumeInfo'] ??= {};
-          item['volumeInfo']['imageLinks'] = {
-            'thumbnail': url,
-            'smallThumbnail': url,
-          };
+    // A Google Books API falha esporadicamente (503/429). Tentamos algumas vezes
+    // antes de desistir, com uma pequena pausa crescente entre tentativas.
+    Object? lastError;
+    for (int attempt = 0; attempt < 3; attempt++) {
+      try {
+        final response = await http.get(Uri.parse(urlString));
+        if (response.statusCode == 200) {
+          final data = json.decode(response.body);
+          final items = (data['items'] ?? []) as List;
+          for (final item in items) {
+            final id = item['id'] as String? ?? '';
+            final url = coverFor(id);
+            item['volumeInfo'] ??= {};
+            item['volumeInfo']['imageLinks'] = {
+              'thumbnail': url,
+              'smallThumbnail': url,
+            };
+          }
+          return items;
         }
-        return items;
-      } else {
+        // Erros temporários (503 serviço indisponível, 429 limite) → volta a tentar
+        if (response.statusCode == 503 || response.statusCode == 429) {
+          lastError = Exception('Erro API: ${response.statusCode}');
+          await Future.delayed(Duration(milliseconds: 400 * (attempt + 1)));
+          continue;
+        }
         throw Exception('Erro API: ${response.statusCode}');
+      } catch (e) {
+        lastError = e;
+        await Future.delayed(Duration(milliseconds: 400 * (attempt + 1)));
       }
-    } catch (e) {
-      rethrow;
     }
+    throw lastError ?? Exception('Falha ao pesquisar livros');
   }
 }
