@@ -136,7 +136,16 @@ class _PostsTab extends StatelessWidget {
     return StreamBuilder<QuerySnapshot>(
       stream: AdminService.postsStream(),
       builder: (_, snap) {
-        final docs = snap.data?.docs ?? [];
+        final docs = List.of(snap.data?.docs ?? []);
+        // Ordena por data no cliente (posts sem createdAt vão para o fim)
+        docs.sort((a, b) {
+          final ta = (a.data() as Map<String, dynamic>)['createdAt'];
+          final tb = (b.data() as Map<String, dynamic>)['createdAt'];
+          if (ta is Timestamp && tb is Timestamp) return tb.compareTo(ta);
+          if (tb is Timestamp) return 1;
+          if (ta is Timestamp) return -1;
+          return 0;
+        });
         if (docs.isEmpty) return const _Empty(icon: Icons.article_outlined, text: 'Sem publicações.');
         return ListView.builder(
           padding: const EdgeInsets.all(16),

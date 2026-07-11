@@ -17,9 +17,11 @@ class AdminService {
   static Stream<QuerySnapshot> postsCountStream() =>
       _db.collection('posts').snapshots();
 
-  // Publicações recentes (para moderação)
+  // Publicações para moderação. Sem orderBy para NÃO excluir posts que não
+  // tenham o campo createdAt (senão a contagem não bate certo com a lista).
+  // A ordenação por data é feita no cliente.
   static Stream<QuerySnapshot> postsStream() =>
-      _db.collection('posts').orderBy('createdAt', descending: true).limit(100).snapshots();
+      _db.collection('posts').limit(100).snapshots();
 
   // Ações de moderação
   static Future<void> deletePost(String postId) async {
