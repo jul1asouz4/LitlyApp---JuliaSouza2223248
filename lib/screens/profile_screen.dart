@@ -105,6 +105,7 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
   void _editBookStatus(String bookId, Map<String, dynamic> book) {
     final ref = _db.collection('users').doc(_uid).collection('books').doc(bookId);
     final current = book['status'] ?? '';
+    int rating = (book['rating'] ?? 0) as int;
     final options = [
       ('reading', '📖', 'A ler'),
       ('want', '🔖', 'Quero ler'),
@@ -112,9 +113,13 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
     ];
     showModalBottomSheet(
       context: context,
+      isScrollControlled: true,
       backgroundColor: appSurface(context),
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
-      builder: (ctx) => Padding(
+      builder: (ctx) => ConstrainedBox(
+        constraints: BoxConstraints(maxHeight: MediaQuery.of(ctx).size.height * 0.85),
+        child: SingleChildScrollView(
+          child: Padding(
         padding: const EdgeInsets.fromLTRB(20, 12, 20, 32),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -142,6 +147,31 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                   ),
                 ),
               ],
+            ),
+            const SizedBox(height: 14),
+            // Avaliação por estrelas (guarda no campo 'rating' do livro)
+            const Text('A tua avaliação',
+              style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: Color(0xFF888888))),
+            const SizedBox(height: 6),
+            StatefulBuilder(
+              builder: (context, setLocal) => Row(
+                children: List.generate(5, (i) {
+                  final filled = i < rating;
+                  return GestureDetector(
+                    onTap: () {
+                      final newRating = rating == i + 1 ? 0 : i + 1;
+                      setLocal(() => rating = newRating);
+                      ref.set({'rating': newRating}, SetOptions(merge: true));
+                    },
+                    behavior: HitTestBehavior.opaque,
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 8),
+                      child: Icon(filled ? Icons.star_rounded : Icons.star_outline_rounded,
+                        size: 32, color: filled ? const Color(0xFFF5A623) : const Color(0xFFCCCCCC)),
+                    ),
+                  );
+                }),
+              ),
             ),
             const SizedBox(height: 14),
             // Sinopse (buscada na Google Books pelo título)
@@ -194,6 +224,8 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
               },
             ),
           ],
+        ),
+          ),
         ),
       ),
     );

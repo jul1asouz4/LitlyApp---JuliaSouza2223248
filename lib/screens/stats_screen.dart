@@ -251,6 +251,16 @@ class _BookStatusListScreen extends StatelessWidget {
   final String uid, status, title;
   const _BookStatusListScreen({required this.uid, required this.status, required this.title});
 
+  void _openEdit(BuildContext context, String bookId, Map<String, dynamic> book) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: appSurface(context),
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
+      builder: (_) => _BookEditSheet(uid: uid, bookId: bookId, book: book),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -284,29 +294,170 @@ class _BookStatusListScreen extends StatelessWidget {
             itemCount: docs.length,
             itemBuilder: (_, i) {
               final b = docs[i].data() as Map<String, dynamic>;
+              final bookId = docs[i].id;
               final cover = (b['image'] ?? '').toString();
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: cover.isNotEmpty
-                          ? Image.network(cover, width: double.infinity, fit: BoxFit.cover,
-                              errorBuilder: (_, __, ___) => Container(color: appField(context),
-                                child: const Icon(Icons.book, color: Colors.grey)))
-                          : Container(color: appField(context),
-                              child: const Icon(Icons.book, color: Colors.grey)),
+              final rating = (b['rating'] ?? 0) as int;
+              return GestureDetector(
+                onTap: () => _openEdit(context, bookId, b),
+                behavior: HitTestBehavior.opaque,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: cover.isNotEmpty
+                            ? Image.network(cover, width: double.infinity, fit: BoxFit.cover,
+                                errorBuilder: (_, __, ___) => Container(color: appField(context),
+                                  child: const Icon(Icons.book, color: Colors.grey)))
+                            : Container(color: appField(context),
+                                child: const Icon(Icons.book, color: Colors.grey)),
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(b['title'] ?? '', maxLines: 2, overflow: TextOverflow.ellipsis,
-                    style: TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: appText(context))),
-                ],
+                    const SizedBox(height: 4),
+                    Text(b['title'] ?? '', maxLines: 2, overflow: TextOverflow.ellipsis,
+                      style: TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: appText(context))),
+                    if (rating > 0) ...[
+                      const SizedBox(height: 2),
+                      Row(children: List.generate(5, (s) => Icon(
+                        s < rating ? Icons.star_rounded : Icons.star_outline_rounded,
+                        size: 11, color: const Color(0xFFF5A623)))),
+                    ],
+                  ],
+                ),
               );
             },
           );
         },
+      ),
+    );
+  }
+}
+
+// ── Folha de edição de um livro (estado + avaliação) ─────────────────────────
+class _BookEditSheet extends StatefulWidget {
+  final String uid, bookId;
+  final Map<String, dynamic> book;
+  const _BookEditSheet({required this.uid, required this.bookId, required this.book});
+
+  @override
+  State<_BookEditSheet> createState() => _BookEditSheetState();
+}
+
+class _BookEditSheetState extends State<_BookEditSheet> {
+  late int _rating;
+  late String _status;
+
+  @override
+  void initState() {
+    super.initState();
+    _rating = (widget.book['rating'] ?? 0) as int;
+    _status = (widget.book['status'] ?? '').toString();
+  }
+
+  DocumentReference get _ref => FirebaseFirestore.instance
+      .collection('users').doc(widget.uid).collection('books').doc(widget.bookId);
+
+  Future<void> _setStatus(String s) async {
+    setState(() => _status = s);
+    await _ref.set({'status': s}, SetOptions(merge: true));
+  }
+
+  Future<void> _setRating(int r) async {
+    // Tocar na mesma estrela limpa a avaliação
+    final newRating = _rating == r ? 0 : r;
+    setState(() => _rating = newRating);
+    await _ref.set({'rating': newRating}, SetOptions(merge: true));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final book = widget.book;
+    final cover = (book['image'] ?? '').toString();
+    final options = [
+      ('reading', '📖', 'A ler'),
+      ('want', '🔖', 'Quero ler'),
+      ('done', '✅', 'Lido'),
+    ];
+    return ConstrainedBox(
+      constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.85),
+      child: SingleChildScrollView(
+      child: Padding(
+      padding: const EdgeInsets.fromLTRB(20, 12, 20, 32),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Center(child: Container(width: 36, height: 4, margin: const EdgeInsets.only(bottom: 16),
+            decoration: BoxDecoration(color: const Color(0xFFDDDDDD), borderRadius: BorderRadius.circular(2)))),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (cover.isNotEmpty)
+                ClipRRect(borderRadius: BorderRadius.circular(6),
+                  child: Image.network(cover, width: 56, height: 80, fit: BoxFit.cover,
+                    errorBuilder: (_, __, ___) => const Icon(Icons.book, size: 56, color: Colors.grey))),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(book['title'] ?? 'Livro',
+                      style: TextStyle(fontSize: 17, fontWeight: FontWeight.w800, color: appText(context))),
+                    const SizedBox(height: 2),
+                    Text(book['author'] ?? '', style: const TextStyle(fontSize: 13, color: Color(0xFF888888))),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 18),
+          const Text('A tua avaliação',
+            style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: Color(0xFF888888))),
+          const SizedBox(height: 8),
+          Row(
+            children: List.generate(5, (i) {
+              final filled = i < _rating;
+              return GestureDetector(
+                onTap: () => _setRating(i + 1),
+                behavior: HitTestBehavior.opaque,
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 8),
+                  child: Icon(filled ? Icons.star_rounded : Icons.star_outline_rounded,
+                    size: 34, color: filled ? const Color(0xFFF5A623) : const Color(0xFFCCCCCC)),
+                ),
+              );
+            }),
+          ),
+          const SizedBox(height: 18),
+          const Text('Estado de leitura',
+            style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: Color(0xFF888888))),
+          const SizedBox(height: 4),
+          ...options.map((o) {
+            final sel = _status == o.$1;
+            return ListTile(
+              contentPadding: EdgeInsets.zero,
+              leading: Text(o.$2, style: const TextStyle(fontSize: 22)),
+              title: Text(o.$3, style: TextStyle(fontSize: 15,
+                fontWeight: sel ? FontWeight.w800 : FontWeight.w500, color: appText(context))),
+              trailing: sel ? const Icon(Icons.check_rounded, color: Color(0xFF2E7D32)) : null,
+              onTap: () => _setStatus(o.$1),
+            );
+          }),
+          Divider(height: 20, color: appField(context)),
+          ListTile(
+            contentPadding: EdgeInsets.zero,
+            leading: const Icon(Icons.delete_outline_rounded, color: Color(0xFFE05D5D)),
+            title: const Text('Remover da biblioteca',
+              style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: Color(0xFFE05D5D))),
+            onTap: () async {
+              await _ref.delete();
+              if (context.mounted) Navigator.pop(context);
+            },
+          ),
+        ],
+      ),
+      ),
       ),
     );
   }
