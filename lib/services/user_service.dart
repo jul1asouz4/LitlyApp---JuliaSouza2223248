@@ -9,11 +9,24 @@ class UserService {
 
   static Future<void> createUserDocument(User user, {String? name, String? username}) async {
     final doc = _db.collection('users').doc(user.uid);
-    final exists = (await doc.get()).exists;
-    if (exists) return;
-
     final resolvedName = name ?? user.displayName ?? 'Utilizador';
     final handle = username ?? '@${user.email?.split('@')[0] ?? 'user'}';
+
+    final exists = (await doc.get()).exists;
+    if (exists) {
+      // O documento já existe (p.ex. criado por um listener durante o registo).
+      // Se o registo forneceu nome/username explícitos, garante que ficam
+      // guardados — sem eles, o username escolhido perder-se-ia numa corrida.
+      if (name != null || username != null) {
+        await doc.set({
+          'name': resolvedName,
+          'nameLower': resolvedName.toLowerCase(),
+          'handle': handle,
+        }, SetOptions(merge: true));
+      }
+      return;
+    }
+
     await doc.set({
       'uid': user.uid,
       'name': resolvedName,

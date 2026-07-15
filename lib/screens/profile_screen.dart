@@ -57,7 +57,10 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
       final data = doc.data() ?? {};
       final name = data['name'] ?? user.displayName ?? 'Utilizador';
       final handle = data['handle'] ?? data['username'] ?? '@${name.toLowerCase().replaceAll(' ', '')}';
-      if (data['nameLower'] == null || data['handle'] == null) {
+      // Backfill só para contas antigas cujo documento já existe mas lhe faltam
+      // campos. Nunca criar um documento por defeito aqui: durante o registo o
+      // documento ainda não existe e isto sobreporia o username escolhido.
+      if (doc.exists && (data['nameLower'] == null || data['handle'] == null)) {
         _db.collection('users').doc(user.uid).set({
           'name': name, 'nameLower': name.toLowerCase(), 'handle': handle,
         }, SetOptions(merge: true));
